@@ -40,7 +40,7 @@ public class Add extends AppCompatActivity {
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
 
-    private AddressResultReceiver resultReceiver;
+    //private AddressResultReceiver resultReceiver;
     private FusedLocationProviderClient fusedLocationClient;
     private Location ultimaPosicion = null;
     private LocationCallback callback;
@@ -54,7 +54,7 @@ public class Add extends AppCompatActivity {
 
     Lugar lugar = new Lugar();
 
-    class AddressResultReceiver extends ResultReceiver {
+    /*class AddressResultReceiver extends ResultReceiver {
 
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -68,7 +68,7 @@ public class Add extends AppCompatActivity {
             String resultado = resultData.getString(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             Log.v(TAG, resultado);
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +128,7 @@ public class Add extends AppCompatActivity {
                 String date = dateNow();
                 lugar.setFecha(date);
                 getLocation();
-                //finish();
+                finish();
             }
         });
     }
@@ -144,7 +144,7 @@ public class Add extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     private void getLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        resultReceiver = new AddressResultReceiver(new Handler());
+        //resultReceiver = new AddressResultReceiver(new Handler());
         callback = createLocationCallback();
         request = createLocationRequest();
 
@@ -173,8 +173,9 @@ public class Add extends AppCompatActivity {
     }
 
     private void requestAddress(Location location) {
+        Log.v("ZZZ", "Se ha entrado en el requestAddress");
         Intent intent = new Intent(this, ServicioGeocoder.class);
-        intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
+        //intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
         intent.putExtra(ServicioGeocoder.Constants.LOCATION_DATA_EXTRA, location);
         intent.putExtra("Lugar", lugar);
         startService(intent);

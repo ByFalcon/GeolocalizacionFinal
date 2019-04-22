@@ -23,11 +23,11 @@ public class ServicioGeocoder extends IntentService {
     GestorLugar gestor;
 
     public final class Constants {
-        public static final int SUCCES_RESULT = 0;
-        public static final int FAILURE_RESULT = 1;
+        //public static final int SUCCES_RESULT = 0;
+        //public static final int FAILURE_RESULT = 1;
         public static final String PACKAGE_NAME = "com.google.android.gms.location.sample.locationaddress";
-        public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
-        public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
+        //public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
+        //public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
         public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME + ".LOCATION_DATA_EXTRA";
     }
 
@@ -37,16 +37,17 @@ public class ServicioGeocoder extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent){
+        Log.v("ZZZ", "Se ha iniciado el servicio");
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
-        if(intent == null) {
+        /*if(intent == null) {
             return;
-        }
-        String errorMessage = "";
+        }*/
+        //String errorMessage = "";
 
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
         Lugar lugar2 = intent.getParcelableExtra("Lugar");
-        receiver = intent.getParcelableExtra(Constants.RECEIVER);
+        //receiver = intent.getParcelableExtra(Constants.RECEIVER);
 
         lugar = lugar2;
 
@@ -56,22 +57,16 @@ public class ServicioGeocoder extends IntentService {
                     location.getLatitude(),
                     location.getLongitude(),
                     10);
-            lugar.setLatitud(location.getLatitude());
-            lugar.setLongitud(location.getLongitude());
+            //lugar.setLatitud(location.getLatitude());
+            //lugar.setLongitud(location.getLongitude());
         } catch (IOException ioException) {
-            errorMessage = "servicio no disponible";
-
+            Log.v("ZZZ", "Servicio no disponible");
         } catch (IllegalArgumentException illegalArgumentException) {
-            errorMessage = "geolocalización no válida";
-
+            Log.v("ZZZ", "Geolocalizacion no valida");
         }
 
         if(addresses == null || addresses.size() == 0){
-            if (errorMessage.isEmpty()){
-                errorMessage = "no hay dirección";
-
-            }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+            Log.v("ZZZ", "No hay direccion");
         } else{
             Address address = addresses.get(0);
             String resultado = "";
@@ -93,13 +88,15 @@ public class ServicioGeocoder extends IntentService {
             String localidad = partes[2] +","+ partes[3];
             String pais = partes[4];
 
-            guardarDireccion(localidad.trim(), pais.trim());
+            lugar.setLatitud(location.getLatitude());
+            lugar.setLongitud(location.getLongitude());
 
-            deliverResultToReceiver(Constants.SUCCES_RESULT, resultado);
+            guardarDireccion(localidad.trim(), pais.trim());
         }
     }
 
     private void guardarDireccion(String localidad, String pais) {
+        Log.v("ZZZ", "Metodo guardarDireccion");
         Log.v("ZZZ", "Localidad: " + localidad);
         Log.v("ZZZ", "Pais: " + pais);
         String numeros = "0123456789";
@@ -127,9 +124,9 @@ public class ServicioGeocoder extends IntentService {
 
     }
 
-    private void deliverResultToReceiver(int resultCode, String message){
+    /*private void deliverResultToReceiver(int resultCode, String message){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
         receiver.send(resultCode, bundle);
-    }
+    }*/
 }
