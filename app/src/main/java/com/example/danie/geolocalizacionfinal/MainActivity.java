@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         adaptador = new Adaptador(lugares);
         adaptador.notifyDataSetChanged();
 
+        recyclerView.setAdapter(adaptador);
+
         adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        recyclerView.setAdapter(adaptador);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,5 +83,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        gestor.cerrar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gestor.cerrar();
     }
 }

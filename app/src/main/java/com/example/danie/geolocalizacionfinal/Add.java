@@ -40,7 +40,7 @@ public class Add extends AppCompatActivity {
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
 
-    //private AddressResultReceiver resultReceiver;
+    private AddressResultReceiver resultReceiver;
     private FusedLocationProviderClient fusedLocationClient;
     private Location ultimaPosicion = null;
     private LocationCallback callback;
@@ -50,11 +50,14 @@ public class Add extends AppCompatActivity {
     private EditText editTextComentario;
     private Button btSumar;
     private Button btRestar;
+    private Button btPosicion;
     private TextView tvPuntuacion;
 
     Lugar lugar = new Lugar();
 
-    /*class AddressResultReceiver extends ResultReceiver {
+    class AddressResultReceiver extends ResultReceiver {
+
+        GestorLugar gestor = new GestorLugar(getApplicationContext());
 
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -62,13 +65,68 @@ public class Add extends AppCompatActivity {
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
+
             if (resultData == null) {
                 return;
             }
+
+            Log.v("ZZZ", "OnReceiverResult");
+
+            //Lugar lugar = resultData.getParcelable(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             String resultado = resultData.getString(ServicioGeocoder.Constants.RESULT_DATA_KEY);
-            Log.v(TAG, resultado);
+
+            goodDirection(resultado);
+            //Log.v("ZZZ", "Se ha salido del metodo");
+
+            Long num = gestor.add(lugar);
+            if (num != -1) {
+                Log.v("ZZZ", "Se ha insertado el lugar");
+            }
+            gestor.cerrar();
         }
-    }*/
+
+        protected void goodDirection(String direccion){
+            Log.v("ZZZ", "GoodDirection");
+
+            String[] partes = direccion.split(",");
+            Log.v("ZZZ", "partes");
+
+            String localidad = partes[2];
+            Log.v("ZZZ", "partes localidad");
+
+            String pais = partes[3];
+            Log.v("ZZZ", "parte pais");
+
+            String numeros = "0123456789";
+            Log.v("ZZZ", "String numeros");
+
+            String localidadFiltrada = "";
+            Log.v("ZZZ", "String localidad filtrada");
+
+            boolean letraCorrecta;
+            Log.v("ZZZ", "boolean letracorrecta");
+
+            for (int i = 0; i < localidad.length(); i++){
+                Log.v("ZZZ", "interacciones for");
+                letraCorrecta = true;
+                for (int j = 0; j<numeros.length(); j++){
+                    Log.v("ZZZ", "interacciones 2for");
+                    if (localidad.charAt(i)==numeros.charAt(j)){
+                        letraCorrecta = false;
+                    }
+                }
+                if (letraCorrecta==true){
+                    Log.v("ZZZ", "Se ha añadido una letra");
+                    localidadFiltrada+=localidad.charAt(i);
+                }
+            }
+            Log.v("ZZZ", "Terminado for");
+
+            lugar.setLocalidad(localidadFiltrada);
+            lugar.setPais(pais);
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +158,7 @@ public class Add extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int puntuacion = Integer.parseInt(tvPuntuacion.getText().toString());
-                if(puntuacion<5){
+                if (puntuacion < 5) {
                     puntuacion++;
                     tvPuntuacion.setText(String.valueOf(puntuacion));
                 }
@@ -111,10 +169,22 @@ public class Add extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int puntuacion = Integer.parseInt(tvPuntuacion.getText().toString());
-                if(puntuacion>1){
+                if (puntuacion > 1) {
                     puntuacion--;
                     tvPuntuacion.setText(String.valueOf(puntuacion));
                 }
+            }
+        });
+
+        btPosicion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lugar.setNombre(editTextNombre.getText().toString());
+                lugar.setComentario(editTextComentario.getText().toString());
+                lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
+                String date = dateNow();
+                lugar.setFecha(date);
+                getLocation();
             }
         });
 
@@ -122,12 +192,12 @@ public class Add extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lugar.setNombre(editTextNombre.getText().toString());
+                /*lugar.setNombre(editTextNombre.getText().toString());
                 lugar.setComentario(editTextComentario.getText().toString());
                 lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
                 String date = dateNow();
                 lugar.setFecha(date);
-                getLocation();
+                getLocation();*/
                 finish();
             }
         });
@@ -139,12 +209,13 @@ public class Add extends AppCompatActivity {
         tvPuntuacion = findViewById(R.id.textViewPuntuacion);
         btRestar = findViewById(R.id.buttonRestar);
         btSumar = findViewById(R.id.buttonSumar);
+        btPosicion = findViewById(R.id.btPosicion);
     }
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        //resultReceiver = new AddressResultReceiver(new Handler());
+        resultReceiver = new AddressResultReceiver(new Handler());
         callback = createLocationCallback();
         request = createLocationRequest();
 
@@ -164,6 +235,8 @@ public class Add extends AppCompatActivity {
                 for (Location location : locationResult.getLocations()) {
                     ultimaPosicion = location;
                     Log.v(TAG, location.getLatitude() + " " + location.getLongitude());
+                    lugar.setLatitud(location.getLatitude());
+                    lugar.setLongitud(location.getLongitude());
                 }
                 requestAddress(ultimaPosicion);
                 fusedLocationClient.removeLocationUpdates(callback);
@@ -175,9 +248,9 @@ public class Add extends AppCompatActivity {
     private void requestAddress(Location location) {
         Log.v("ZZZ", "Se ha entrado en el requestAddress");
         Intent intent = new Intent(this, ServicioGeocoder.class);
-        //intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
+        intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
         intent.putExtra(ServicioGeocoder.Constants.LOCATION_DATA_EXTRA, location);
-        intent.putExtra("Lugar", lugar);
+        //intent.putExtra("Lugar", lugar);
         startService(intent);
     }
 
@@ -207,7 +280,7 @@ public class Add extends AppCompatActivity {
         }
     }
 
-    public String dateNow(){
+    public String dateNow() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
