@@ -33,17 +33,17 @@ public class Lugar implements Parcelable {
 
     protected Lugar(Parcel in) {
         id = in.readLong();
-        nombre = in.readString();
         latitud = in.readDouble();
         longitud = in.readDouble();
         localidad = in.readString();
         pais = in.readString();
+        nombre = in.readString();
         comentario = in.readString();
         puntuacion = in.readInt();
         fecha = in.readString();
     }
 
-    public static final Parcelable.Creator<Lugar> CREATOR = new Parcelable.Creator<Lugar>() {
+    public static final Creator<Lugar> CREATOR = new Creator<Lugar>() {
         @Override
         public Lugar createFromParcel(Parcel in) {
             return new Lugar(in);
@@ -141,6 +141,7 @@ public class Lugar implements Parcelable {
                 '}';
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -158,5 +159,4 @@ public class Lugar implements Parcelable {
         dest.writeInt(puntuacion);
         dest.writeString(fecha);
     }
-
 }

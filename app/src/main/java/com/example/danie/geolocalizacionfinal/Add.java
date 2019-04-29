@@ -2,6 +2,7 @@ package com.example.danie.geolocalizacionfinal;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -81,6 +84,7 @@ public class Add extends AppCompatActivity {
             Long num = gestor.add(lugar);
             if (num != -1) {
                 Log.v("ZZZ", "Se ha insertado el lugar");
+                Toast.makeText(getApplicationContext(), "Se ha realizado el insert", Toast.LENGTH_SHORT).show();
             }
             gestor.cerrar();
         }
@@ -185,6 +189,8 @@ public class Add extends AppCompatActivity {
                 String date = dateNow();
                 lugar.setFecha(date);
                 getLocation();
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
 

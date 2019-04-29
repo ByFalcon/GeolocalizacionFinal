@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -27,17 +28,19 @@ public class Detail extends AppCompatActivity {
         init();
 
         Intent intent = getIntent();
-        Lugar lugar = intent.getParcelableExtra("lugar");
-        if (lugar != null) {
-            textViewDetalleNombre.setText(lugar.getNombre());
-            textViewDetalleLocalidad.setText(lugar.getLocalidad());
-            textViewDetallePais.setText(lugar.getPais());
-            textViewDetalleLatitud.setText(lugar.getLatitud() + "");
-            textViewDetalleLongitud.setText(lugar.getLongitud() + "");
-            textViewDetalleComentario.setText(lugar.getComentario());
-            ratingBar.setRating(lugar.getPuntuacion());
-            textViewDetalleFecha.setText(lugar.getFecha());
-        }
+        Lugar lugar = intent.getParcelableExtra("lugarDetalle");
+        Log.v("xxx", lugar.toString());
+
+        textViewDetalleNombre.setText(lugar.getNombre());
+        textViewDetalleLocalidad.setText(lugar.getLocalidad());
+        textViewDetallePais.setText(lugar.getPais());
+        textViewDetalleLatitud.setText(lugar.getLatitud() + "");
+        textViewDetalleLongitud.setText(lugar.getLongitud() + "");
+        textViewDetalleComentario.setText(lugar.getComentario());
+        ratingBar.setRating(lugar.getPuntuacion());
+        ratingBar.setFocusable(false);
+        ratingBar.setEnabled(false);
+        textViewDetalleFecha.setText(lugar.getFecha());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

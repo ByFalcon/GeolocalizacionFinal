@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,26 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        ayudante = new Ayudante(this);
-        gestor = new GestorLugar(this, true);
-
-        lugares = gestor.get();
-
-        adaptador = new Adaptador(lugares);
-        adaptador.notifyDataSetChanged();
-
-        recyclerView.setAdapter(adaptador);
-
-        adaptador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Detail.class);
-                Lugar lugarDetalle = lugares.get(recyclerView.getChildAdapterPosition(v));
-                i.putExtra("lugar", lugarDetalle);
-                startActivity(i);
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,14 +67,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        gestor.cerrar();
-    }
+    protected void onResume() {
+        super.onResume();
+        ayudante = new Ayudante(this);
+        gestor = new GestorLugar(this, true);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        gestor.cerrar();
+        lugares = gestor.get();
+
+        adaptador = new Adaptador(lugares);
+        adaptador.notifyDataSetChanged();
+
+        recyclerView.setAdapter(adaptador);
+
+        adaptador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Detail.class);
+                Lugar lugar = lugares.get(recyclerView.getChildAdapterPosition(v));
+                i.putExtra("lugarDetalle", lugar);
+                i.putExtra("otronombre", "una cadena cualquiera");
+                Log.v("xxx", lugar.toString());
+                startActivity(i);
+            }
+        });
     }
 }
