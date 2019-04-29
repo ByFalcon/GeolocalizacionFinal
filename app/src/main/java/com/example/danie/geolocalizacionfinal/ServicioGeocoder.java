@@ -18,9 +18,9 @@ public class ServicioGeocoder extends IntentService {
 
     protected ResultReceiver receiver;
 
-    //Lugar lugar = new Lugar();
+    Lugar lugar = new Lugar();
 
-    //GestorLugar gestor;
+    GestorLugar gestor;
 
     public final class Constants {
         public static final int SUCCES_RESULT = 0;
@@ -46,10 +46,9 @@ public class ServicioGeocoder extends IntentService {
         //String errorMessage = "";
 
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
-        //Lugar lugar2 = intent.getParcelableExtra("Lugar");
+        lugar = intent.getParcelableExtra("Lugar");
         receiver = intent.getParcelableExtra(Constants.RECEIVER);
 
-        //lugar = lugar2;
         Log.v("ZZZ", "Se ha asignado el lugar 2 al 1");
 
         List<Address> addresses = null;
@@ -87,29 +86,23 @@ public class ServicioGeocoder extends IntentService {
 
             Log.v("ZZZ", "Lista de direcciones lista");
 
-            /*String[] partes = resultado.split(",");
-            String localidad = partes[2];
-            String pais = partes[3];
-
-            Log.v("ZZZ", localidad);
-            Log.v("ZZZ", pais);
-
-            guardarDireccion(localidad.trim(), pais.trim());
-            Log.v("ZZZ", "Ha terminado el metodo guardar direccion");
-            */
+            goodDirection(resultado);
 
             deliverResultToReceiver(Constants.SUCCES_RESULT, resultado);
         }
     }
 
-    /*private void guardarDireccion(String localidad, String pais) {
-        Log.v("ZZZ", "Metodo guardarDireccion");
-        Log.v("ZZZ", "Localidad: " + localidad);
-        Log.v("ZZZ", "Pais: " + pais);
+    protected void goodDirection(String direccion){
+        String[] partes = direccion.split(",");
+        String localidad = "", pais = "";
+        if(partes.length>=4) {
+            localidad = partes[2];
+            pais = partes[3];
+        }
         String numeros = "0123456789";
         String localidadFiltrada = "";
         boolean letraCorrecta;
-        for (int i = 0; i<localidad.length(); i++){
+        for (int i = 0; i < localidad.length(); i++){
             letraCorrecta = true;
             for (int j = 0; j<numeros.length(); j++){
                 if (localidad.charAt(i)==numeros.charAt(j)){
@@ -120,16 +113,25 @@ public class ServicioGeocoder extends IntentService {
                 localidadFiltrada+=localidad.charAt(i);
             }
         }
-        Log.v("ZZZ", "Localidad filtrada: " + localidadFiltrada.trim());
         lugar.setLocalidad(localidadFiltrada.trim());
         lugar.setPais(pais.trim());
-    }*/
+    }
 
     private void deliverResultToReceiver(int resultCode, String resultado){
         Log.v("ZZZ", "Se ha entrado en el deliverResultToReceiver");
+        gestor = new GestorLugar(this);
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long num = gestor.insert(lugar);
+        if (num > 0){
+            Log.v("XXX", "se ha insertado");
+        }
+
         Bundle bundle = new Bundle();
-        //bundle.putParcelable(Constants.RESULT_DATA_KEY, lugar);
-        bundle.putString(Constants.RESULT_DATA_KEY, resultado);
-        receiver.send(resultCode, bundle);
+        bundle.putLong(Constants.RESULT_DATA_KEY, num);
+        receiver.send(resultCode,bundle);
     }
 }

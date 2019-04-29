@@ -97,7 +97,7 @@ public class GestorLugar {
                 parametros,
                 null,
                 null,
-                Contrato.TableLugar.NOMBRE + " asc");
+                Contrato.TableLugar._ID + " desc");
     }
 
     public Cursor getCursor(long id) {

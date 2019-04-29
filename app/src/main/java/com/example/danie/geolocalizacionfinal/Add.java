@@ -43,7 +43,7 @@ public class Add extends AppCompatActivity {
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
 
-    private AddressResultReceiver resultReceiver;
+    //private AddressResultReceiver resultReceiver;
     private FusedLocationProviderClient fusedLocationClient;
     private Location ultimaPosicion = null;
     private LocationCallback callback;
@@ -58,9 +58,9 @@ public class Add extends AppCompatActivity {
 
     Lugar lugar = new Lugar();
 
-    class AddressResultReceiver extends ResultReceiver {
+    /*class AddressResultReceiver extends ResultReceiver {
 
-        GestorLugar gestor = new GestorLugar(getApplicationContext());
+        //GestorLugar gestor = new GestorLugar(getApplicationContext());
 
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -81,7 +81,7 @@ public class Add extends AppCompatActivity {
             goodDirection(resultado);
             //Log.v("ZZZ", "Se ha salido del metodo");
 
-            Long num = gestor.add(lugar);
+            /*Long num = gestor.add(lugar);
             if (num != -1) {
                 Log.v("ZZZ", "Se ha insertado el lugar");
                 Toast.makeText(getApplicationContext(), "Se ha realizado el insert", Toast.LENGTH_SHORT).show();
@@ -90,47 +90,31 @@ public class Add extends AppCompatActivity {
         }
 
         protected void goodDirection(String direccion){
-            Log.v("ZZZ", "GoodDirection");
-
             String[] partes = direccion.split(",");
-            Log.v("ZZZ", "partes");
-
-            String localidad = partes[2];
-            Log.v("ZZZ", "partes localidad");
-
-            String pais = partes[3];
-            Log.v("ZZZ", "parte pais");
-
+            String localidad = "", pais = "";
+            if(partes.length>=4) {
+                localidad = partes[2];
+                pais = partes[3];
+            }
             String numeros = "0123456789";
-            Log.v("ZZZ", "String numeros");
-
             String localidadFiltrada = "";
-            Log.v("ZZZ", "String localidad filtrada");
-
             boolean letraCorrecta;
-            Log.v("ZZZ", "boolean letracorrecta");
-
             for (int i = 0; i < localidad.length(); i++){
-                Log.v("ZZZ", "interacciones for");
                 letraCorrecta = true;
                 for (int j = 0; j<numeros.length(); j++){
-                    Log.v("ZZZ", "interacciones 2for");
                     if (localidad.charAt(i)==numeros.charAt(j)){
                         letraCorrecta = false;
                     }
                 }
                 if (letraCorrecta==true){
-                    Log.v("ZZZ", "Se ha añadido una letra");
                     localidadFiltrada+=localidad.charAt(i);
                 }
             }
-            Log.v("ZZZ", "Terminado for");
-
-            lugar.setLocalidad(localidadFiltrada);
-            lugar.setPais(pais);
+            lugar.setLocalidad(localidadFiltrada.trim());
+            lugar.setPais(pais.trim());
         }
 
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +124,6 @@ public class Add extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         init();
-
-        Log.v(TAG, "inicio");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -155,7 +137,6 @@ public class Add extends AppCompatActivity {
             }
         } else {
             Log.v(TAG, "se dispone del permiso por lo que se lanza directamente");
-            //getLocation();
         }
 
         btSumar.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +169,13 @@ public class Add extends AppCompatActivity {
                 lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
                 String date = dateNow();
                 lugar.setFecha(date);
-                getLocation();
+                //getLocation();
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                Intent i = new Intent();
+                i.putExtra("lugar", lugar);
+                setResult(Add.RESULT_OK, i);
+                finish();
             }
         });
 
@@ -198,12 +183,8 @@ public class Add extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*lugar.setNombre(editTextNombre.getText().toString());
-                lugar.setComentario(editTextComentario.getText().toString());
-                lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
-                String date = dateNow();
-                lugar.setFecha(date);
-                getLocation();*/
+                Intent i = new Intent();
+                setResult(Add.RESULT_CANCELED, i);
                 finish();
             }
         });
@@ -217,18 +198,18 @@ public class Add extends AppCompatActivity {
         btSumar = findViewById(R.id.buttonSumar);
         btPosicion = findViewById(R.id.btPosicion);
     }
-
+/*
     @SuppressLint("MissingPermission")
     private void getLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        resultReceiver = new AddressResultReceiver(new Handler());
+        //resultReceiver = new AddressResultReceiver(new Handler());
         callback = createLocationCallback();
         request = createLocationRequest();
 
         fusedLocationClient.requestLocationUpdates(
                 request,
                 callback,
-                null /* Looper */);
+                null);
     }
 
     private LocationCallback createLocationCallback() {
@@ -254,9 +235,9 @@ public class Add extends AppCompatActivity {
     private void requestAddress(Location location) {
         Log.v("ZZZ", "Se ha entrado en el requestAddress");
         Intent intent = new Intent(this, ServicioGeocoder.class);
-        intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
+        //intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
         intent.putExtra(ServicioGeocoder.Constants.LOCATION_DATA_EXTRA, location);
-        //intent.putExtra("Lugar", lugar);
+        intent.putExtra("Lugar", lugar);
         startService(intent);
     }
 
@@ -284,11 +265,12 @@ public class Add extends AppCompatActivity {
                 }
             }
         }
-    }
+    }*/
 
     public String dateNow() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
+
 }
