@@ -44,10 +44,10 @@ public class Add extends AppCompatActivity {
     public static final String TAG = "ZZZ";
 
     //private AddressResultReceiver resultReceiver;
-    private FusedLocationProviderClient fusedLocationClient;
-    private Location ultimaPosicion = null;
-    private LocationCallback callback;
-    private LocationRequest request;
+    //private FusedLocationProviderClient fusedLocationClient;
+    //private Location ultimaPosicion = null;
+    //private LocationCallback callback;
+    //private LocationRequest request;
 
     private EditText editTextNombre;
     private EditText editTextComentario;
@@ -198,6 +198,12 @@ public class Add extends AppCompatActivity {
         btSumar = findViewById(R.id.buttonSumar);
         btPosicion = findViewById(R.id.btPosicion);
     }
+
+    public String dateNow() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 /*
     @SuppressLint("MissingPermission")
     private void getLocation() {
@@ -266,11 +272,5 @@ public class Add extends AppCompatActivity {
             }
         }
     }*/
-
-    public String dateNow() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
 
 }

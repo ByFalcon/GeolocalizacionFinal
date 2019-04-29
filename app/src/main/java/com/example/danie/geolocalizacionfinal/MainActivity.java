@@ -60,15 +60,6 @@ public class MainActivity extends AppCompatActivity {
     Adaptador adaptador;
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PREINSERT && resultCode == RESULT_OK) {
-            lugar = data.getParcelableExtra("lugar");
-            getLocation();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -83,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Add.class);
-                startActivity(intent);
                 startActivityForResult(intent, PREINSERT);
             }
         });
@@ -120,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
         lugares = gestor.get();
 
         adaptador = new Adaptador(lugares);
-        //adaptador.notifyDataSetChanged();
-
         recyclerView.setAdapter(adaptador);
 
         adaptador.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +118,19 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), Detail.class);
                 Lugar lugar = lugares.get(recyclerView.getChildAdapterPosition(v));
                 i.putExtra("lugarDetalle", lugar);
-                Log.v("xxx", lugar.toString());
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PREINSERT && resultCode == RESULT_OK) {
+            lugar = data.getParcelableExtra("lugar");
+            Log.v("CCC", "getLocation()");
+            getLocation();
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient.requestLocationUpdates(
                 request,
                 callback,
-                null /* Looper */);
+                null);
     }
 
     private LocationCallback createLocationCallback() {
