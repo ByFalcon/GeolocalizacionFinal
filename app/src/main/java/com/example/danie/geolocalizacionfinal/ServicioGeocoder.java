@@ -16,6 +16,7 @@ import java.util.Locale;
 
 public class ServicioGeocoder extends IntentService {
 
+    private static final String TAG = "ZZZ";
     protected ResultReceiver receiver;
 
     Lugar lugar = new Lugar();
@@ -95,9 +96,12 @@ public class ServicioGeocoder extends IntentService {
     protected void goodDirection(String direccion){
         String[] partes = direccion.split(",");
         String localidad = "", pais = "";
-        if(partes.length>=4) {
-            localidad = partes[2];
-            pais = partes[3];
+        if (partes.length>=5){
+            localidad = partes[2].trim() + ", " + partes[3].trim();
+            pais = partes[4];
+        } else if (partes.length>=4) {
+            localidad = partes[2].trim();
+            pais = partes[3].trim();
         }
         String numeros = "0123456789";
         String localidadFiltrada = "";
@@ -127,9 +131,8 @@ public class ServicioGeocoder extends IntentService {
         }
         long num = gestor.insert(lugar);
         if (num > 0){
-            Log.v("XXX", "se ha insertado");
+            Log.v(TAG, "se ha insertado");
         }
-
         Bundle bundle = new Bundle();
         bundle.putLong(Constants.RESULT_DATA_KEY, num);
         receiver.send(resultCode,bundle);
