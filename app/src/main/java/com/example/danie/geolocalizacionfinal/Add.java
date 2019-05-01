@@ -11,6 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,17 +64,21 @@ public class Add extends AppCompatActivity {
         btPosicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lugar.setNombre(editTextNombre.getText().toString());
-                lugar.setComentario(editTextComentario.getText().toString());
-                lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
-                String date = dateNow();
-                lugar.setFecha(date);
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                Intent i = new Intent();
-                i.putExtra("lugarAdd", lugar);
-                setResult(Add.RESULT_OK, i);
-                finish();
+                if (!editTextNombre.getText().toString().isEmpty()) {
+                    lugar.setNombre(editTextNombre.getText().toString());
+                    lugar.setComentario(editTextComentario.getText().toString());
+                    lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
+                    String date = dateNow();
+                    lugar.setFecha(date);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    Intent i = new Intent();
+                    i.putExtra("lugarAdd", lugar);
+                    setResult(Add.RESULT_OK, i);
+                    finish();
+                }else{
+                    Toast.makeText(Add.this, "Debes introducir un nombre", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
