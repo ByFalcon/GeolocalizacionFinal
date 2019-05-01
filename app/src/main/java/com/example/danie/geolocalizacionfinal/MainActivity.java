@@ -1,16 +1,19 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -43,12 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationCallback callback;
     private LocationRequest request;
 
-    private EditText editTextNombre;
-    private EditText editTextComentario;
-    private Button btSumar;
-    private Button btRestar;
-    private Button btPosicion;
-    private TextView tvPuntuacion;
+    FloatingActionButton fab;
 
     Lugar lugar = new Lugar();
 
@@ -69,7 +68,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Log.v(TAG, "aquí debe saltar un elemento que explique la razón por la que se necesita el permiso");
+            } else {
+                Log.v(TAG, "aquí se solicita el permiso (normalmente la primera vez)");
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISO_GPS);
+            }
+        }
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,23 +91,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -106,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         ayudante = new Ayudante(this);
         gestor = new GestorLugar(this, true);
+
+        //fab.setEnabled(true);
 
         lugares = gestor.get();
 
@@ -127,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PREINSERT && resultCode == RESULT_OK) {
-            lugar = data.getParcelableExtra("lugar");
-            Log.v("CCC", "getLocation()");
+            lugar = data.getParcelableExtra("lugarAdd");
+            fab.setEnabled(false);
             getLocation();
         }
     }
@@ -167,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestAddress(Location location) {
-        Log.v("ZZZ", "Se ha entrado en el requestAddress");
+        Log.v(TAG, "Se ha entrado en el requestAddress");
         Intent intent = new Intent(this, ServicioGeocoder.class);
         intent.putExtra(ServicioGeocoder.Constants.RECEIVER, resultReceiver);
         intent.putExtra(ServicioGeocoder.Constants.LOCATION_DATA_EXTRA, location);
@@ -193,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.v(TAG, "con permiso");
-                    //getLocation();
                 } else {
                     Log.v(TAG, "sin permiso");
                 }
@@ -202,23 +208,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class AddressResultReceiver extends ResultReceiver {
-
         public AddressResultReceiver(Handler handler) {
             super(handler);
         }
-
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-
             if (resultData == null) {
                 return;
             }
-
             long r = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             if (r>0){
+                Log.v(TAG, "Se ha entrado en el if del insert");
                 adaptador.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this, "Se ha insertado el lugar", Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                fab.setEnabled(true);
+                finish();
+                overridePendingTransition(0,0);
+                startActivity(intent);
+                overridePendingTransition(0,0);
+
             }
         }
-
     }
 }
