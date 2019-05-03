@@ -2,11 +2,9 @@ package com.example.danie.geolocalizacionfinal;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -22,9 +20,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,10 +28,25 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Firebase
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference databaseReference;
 
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
@@ -64,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Firebase
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -111,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         ayudante = new Ayudante(this);
         gestor = new GestorLugar(this, true);
-
-        //fab.setEnabled(true);
 
         lugares = gestor.get();
 
@@ -216,8 +229,22 @@ public class MainActivity extends AppCompatActivity {
             if (resultData == null) {
                 return;
             }
-            long r = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
-            if (r>0){
+            Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
+            Map<String, Object> saveItem = new HashMap<>();
+            String key = databaseReference.child("item").push().getKey();
+            lugarInsertado.setKey(key);
+            saveItem.put("/usurio/lugar/" + key + "/", lugarInsertado.toMap());
+            databaseReference.updateChildren(saveItem)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(MainActivity.this, "Se ha insertado en firebase", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            long num = gestor.insert(lugarInsertado);
+            //long r = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
+            if (num > 0){
                 Log.v(TAG, "Se ha entrado en el if del insert");
                 adaptador.notifyDataSetChanged();
                 Toast.makeText(MainActivity.this, "Se ha insertado el lugar", Toast.LENGTH_LONG).show();
@@ -228,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 startActivity(intent);
                 overridePendingTransition(0,0);
-
             }
         }
     }

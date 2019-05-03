@@ -3,6 +3,9 @@ package com.example.danie.geolocalizacionfinal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Lugar implements Parcelable {
 
     private long id;
@@ -14,12 +17,14 @@ public class Lugar implements Parcelable {
     private String comentario;
     private int puntuacion;
     private String fecha;
+    private String key;
 
     public Lugar() {
-        this(0,"",0,0,"","","",0,"");
+        this(0,"",0,0,"","","",0,"", "");
     }
 
-    public Lugar(long id,String nombre, double latitud, double longitud, String localidad, String pais, String comentario, int puntuacion, String fecha) {
+    public Lugar(long id,String nombre, double latitud, double longitud, String localidad,
+                 String pais, String comentario, int puntuacion, String fecha, String key) {
         this.id = id;
         this.nombre = nombre;//tu
         this.latitud = latitud;//gps
@@ -29,6 +34,7 @@ public class Lugar implements Parcelable {
         this.comentario = comentario;//tu
         this.puntuacion = puntuacion;//tu
         this.fecha = fecha;//sistema
+        this.key=key;
     }
 
     protected Lugar(Parcel in) {
@@ -41,6 +47,7 @@ public class Lugar implements Parcelable {
         comentario = in.readString();
         puntuacion = in.readInt();
         fecha = in.readString();
+        key = in.readString();
     }
 
     public static final Creator<Lugar> CREATOR = new Creator<Lugar>() {
@@ -127,6 +134,14 @@ public class Lugar implements Parcelable {
         this.fecha = fecha;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "Lugar{" +
@@ -140,7 +155,6 @@ public class Lugar implements Parcelable {
                 ", fecha='" + fecha + '\'' +
                 '}';
     }
-
 
     @Override
     public int describeContents() {
@@ -158,5 +172,21 @@ public class Lugar implements Parcelable {
         dest.writeString(comentario);
         dest.writeInt(puntuacion);
         dest.writeString(fecha);
+        dest.writeString(key);
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("nombre", nombre);
+        result.put("latitud", latitud);
+        result.put("longitud", longitud);
+        result.put("localidad", localidad);
+        result.put("pais", pais);
+        result.put("comentario", comentario);
+        result.put("puntuacion", puntuacion);
+        result.put("fecha", fecha);
+        result.put("key", key);
+        return result;
     }
 }

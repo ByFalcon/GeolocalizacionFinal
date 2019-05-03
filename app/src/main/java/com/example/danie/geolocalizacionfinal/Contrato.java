@@ -17,6 +17,7 @@ public class Contrato {
         public static final String COMENTARIO = "comentario";
         public static final String PUNTOS = "puntos";
         public static final String FECHA = "fecha";
+        public static final String KEY = "key";
 
         public static final String CREATE_TABLE =
                 "create table " + TABLE + " (" +
@@ -28,7 +29,8 @@ public class Contrato {
                         PAIS + " text," +
                         COMENTARIO + " text," +
                         PUNTOS + " integer," +
-                        FECHA + " text)";
+                        FECHA + " text," +
+                        KEY + " text)";
 
         public static final String DROP_TABLE =
                 "drop table " + TABLE;
