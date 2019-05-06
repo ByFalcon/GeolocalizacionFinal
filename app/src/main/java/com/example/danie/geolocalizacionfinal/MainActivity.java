@@ -28,12 +28,12 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+/*import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.FirebaseDatabase;*/
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,10 +43,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     //Firebase
-    private FirebaseAuth firebaseAuth;
+    /*private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;*/
 
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Firebase
-        firebaseAuth = FirebaseAuth.getInstance();
+        /*firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        databaseReference = firebaseDatabase.getReference();*/
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -229,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
             if (resultData == null) {
                 return;
             }
-            Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
-            Map<String, Object> saveItem = new HashMap<>();
+            //Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
+            /*Map<String, Object> saveItem = new HashMap<>();
             String key = databaseReference.child("item").push().getKey();
             lugarInsertado.setKey(key);
             saveItem.put("/usurio/lugar/" + key + "/", lugarInsertado.toMap());
@@ -241,9 +241,9 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Se ha insertado en firebase", Toast.LENGTH_LONG).show();
                         }
                     });
-
-            long num = gestor.insert(lugarInsertado);
-            //long r = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
+*/
+            //long num = gestor.insert(lugarInsertado);
+            long num = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             if (num > 0){
                 Log.v(TAG, "Se ha entrado en el if del insert");
                 adaptador.notifyDataSetChanged();

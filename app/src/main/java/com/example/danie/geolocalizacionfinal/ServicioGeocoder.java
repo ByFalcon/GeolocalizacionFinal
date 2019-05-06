@@ -98,7 +98,7 @@ public class ServicioGeocoder extends IntentService {
         String localidad = "", pais = "";
         if (partes.length>=5){
             localidad = partes[2].trim() + ", " + partes[3].trim();
-            pais = partes[4];
+            pais = partes[4].trim();
         } else if (partes.length>=4) {
             localidad = partes[2].trim();
             pais = partes[3].trim();
@@ -124,18 +124,18 @@ public class ServicioGeocoder extends IntentService {
     private void deliverResultToReceiver(int resultCode){
         Log.v("ZZZ", "Se ha entrado en el deliverResultToReceiver");
         gestor = new GestorLugar(this);
-        try {
+        /*try {
             Thread.sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         long num = gestor.insert(lugar);
         if (num > 0){
             Log.v(TAG, "se ha insertado");
         }
         Bundle bundle = new Bundle();
-        //bundle.putLong(Constants.RESULT_DATA_KEY, num);
-        bundle.putParcelable("lugarInsertado", lugar);
+        bundle.putLong(Constants.RESULT_DATA_KEY, num);
+        //bundle.putParcelable("lugarInsertado", lugar);
         receiver.send(resultCode,bundle);
     }
 }
