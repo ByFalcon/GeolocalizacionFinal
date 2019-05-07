@@ -54,6 +54,11 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder>
         }
     }
 
+    public void swap(List<Lugar> lugares) {
+        this.lugares = lugares;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvNombre, tvLocalidad, tvPais;

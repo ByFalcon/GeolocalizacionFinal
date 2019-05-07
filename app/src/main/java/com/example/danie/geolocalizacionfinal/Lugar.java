@@ -20,7 +20,7 @@ public class Lugar implements Parcelable {
     private String key;
 
     public Lugar() {
-        this(0,"",0,0,"","","",0,"", "");
+        this(0,"a",0,0,"a","a","a",0,"", "a");
     }
 
     public Lugar(long id,String nombre, double latitud, double longitud, String localidad,

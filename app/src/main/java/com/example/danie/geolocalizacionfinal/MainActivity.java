@@ -27,6 +27,12 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /*import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,10 +49,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     //Firebase
-    /*private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
-    private DatabaseReference databaseReference;*/
+    private DatabaseReference databaseReference;
 
     private static final int PERMISO_GPS = 1;
     public static final String TAG = "ZZZ";
@@ -76,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Firebase
-        /*firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();*/
+        databaseReference = firebaseDatabase.getReference();
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -221,16 +227,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class AddressResultReceiver extends ResultReceiver {
+
         public AddressResultReceiver(Handler handler) {
             super(handler);
         }
+
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultData == null) {
                 return;
             }
-            //Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
-            /*Map<String, Object> saveItem = new HashMap<>();
+            Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
+            Map<String, Object> saveItem = new HashMap<>();
             String key = databaseReference.child("item").push().getKey();
             lugarInsertado.setKey(key);
             saveItem.put("/usurio/lugar/" + key + "/", lugarInsertado.toMap());
@@ -241,21 +249,33 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Se ha insertado en firebase", Toast.LENGTH_LONG).show();
                         }
                     });
-*/
-            //long num = gestor.insert(lugarInsertado);
-            long num = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
+
+            long num = gestor.insert(lugarInsertado);
+            //long num = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             if (num > 0){
                 Log.v(TAG, "Se ha entrado en el if del insert");
+
+                /*
+                sol 1
+                Lugar l = resultData.getParcelable("lugarInsertado");
+                lugares.add(l);
                 adaptador.notifyDataSetChanged();
+                */
+
+                /* sol 2 */
+                lugares = gestor.get();
+                adaptador.swap(lugares);
+
+                /*
+                sol 3
+                adacptador basado en el cursor
+                */
+
                 Toast.makeText(MainActivity.this, "Se ha insertado el lugar", Toast.LENGTH_LONG).show();
-                Intent intent = getIntent();
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                fab.setEnabled(true);
-                finish();
-                overridePendingTransition(0,0);
-                startActivity(intent);
-                overridePendingTransition(0,0);
+            } else {
+                Toast.makeText(MainActivity.this, "No se ha insertado el lugar", Toast.LENGTH_LONG).show();
             }
+            fab.setEnabled(true);
         }
     }
 }

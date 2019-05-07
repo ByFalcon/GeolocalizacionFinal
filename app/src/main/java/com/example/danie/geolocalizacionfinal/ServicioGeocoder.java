@@ -21,7 +21,7 @@ public class ServicioGeocoder extends IntentService {
 
     Lugar lugar = new Lugar();
 
-    GestorLugar gestor;
+    //GestorLugar gestor;
 
     public final class Constants {
         public static final int SUCCES_RESULT = 0;
@@ -123,19 +123,19 @@ public class ServicioGeocoder extends IntentService {
 
     private void deliverResultToReceiver(int resultCode){
         Log.v("ZZZ", "Se ha entrado en el deliverResultToReceiver");
-        gestor = new GestorLugar(this);
+        //gestor = new GestorLugar(this);
         /*try {
             Thread.sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        long num = gestor.insert(lugar);
+        /*long num = gestor.insert(lugar);
         if (num > 0){
             Log.v(TAG, "se ha insertado");
-        }
+        }*/
         Bundle bundle = new Bundle();
-        bundle.putLong(Constants.RESULT_DATA_KEY, num);
-        //bundle.putParcelable("lugarInsertado", lugar);
+        //bundle.putLong(Constants.RESULT_DATA_KEY, num);
+        bundle.putParcelable("lugarInsertado", lugar);
         receiver.send(resultCode,bundle);
     }
 }
