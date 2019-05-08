@@ -13,8 +13,8 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".Registrarse"
-            android:label="@string/title_activity_registrarse"
+            android:name=".Inicial"
+            android:label="@string/title_activity_inicial"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,15 +26,16 @@
         <activity
             android:name=".IniciarSesion"
             android:label="@string/title_activity_iniciar_sesion"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Inicial"
-            android:label="@string/title_activity_inicial"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
 
-        <service
-            android:name=".ServicioGeocoder"
-            android:exported="false" />
+        </activity>
+
+        <activity
+            android:name=".Registrarse"
+            android:label="@string/title_activity_registrarse"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <activity
             android:name=".MainActivity"
@@ -42,14 +43,24 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
         <activity
             android:name=".Add"
             android:label="Añadir lugar"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
         <activity
             android:name=".Detail"
             android:label="Info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <service
+        android:name=".ServicioGeocoder"
+        android:exported="false" />
     </application>
 
 </manifest>

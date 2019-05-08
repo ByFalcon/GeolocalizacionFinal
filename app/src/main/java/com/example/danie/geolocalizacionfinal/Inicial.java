@@ -1,5 +1,6 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.widget.Button;
 public class Inicial extends AppCompatActivity {
 
     private Button btSingIn, btRegister;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +26,16 @@ public class Inicial extends AppCompatActivity {
         btSingIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                intent = new Intent(getApplicationContext(), IniciarSesion.class);
+                startActivity(intent);
             }
         });
 
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                intent = new Intent(getApplicationContext(), Registrarse.class);
+                startActivity(intent);
             }
         });
     }
