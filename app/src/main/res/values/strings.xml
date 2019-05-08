@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GeolocalizacionFinal</string>
+    <string name="app_name">¡Vaya lugares!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add">Add</string>
     <string name="title_activity_detail">Detail</string>
@@ -13,4 +13,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_inicial">Inicial</string>
+    <string name="title_activity_iniciar_sesion">IniciarSesion</string>
+    <string name="title_activity_registrarse">Registrarse</string>
 </resources>

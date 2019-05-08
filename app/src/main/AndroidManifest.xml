@@ -11,13 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".Registrarse"
+            android:label="@string/title_activity_registrarse"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".IniciarSesion"
+            android:label="@string/title_activity_iniciar_sesion"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Inicial"
             android:label="@string/title_activity_inicial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".ui.login.Login"
-            android:label="@string/title_activity_login" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".ServicioGeocoder"
@@ -27,11 +40,7 @@
             android:name=".MainActivity"
             android:label="Lugares"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Add"
