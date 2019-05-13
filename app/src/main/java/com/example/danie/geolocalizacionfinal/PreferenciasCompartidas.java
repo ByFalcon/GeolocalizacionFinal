@@ -21,7 +21,7 @@ public class PreferenciasCompartidas {
         editor.apply();
     }
 
-    public String getSesion() {
+    public String getPreferencias() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String v = pref.getString("credenciales", "null");
         return v;

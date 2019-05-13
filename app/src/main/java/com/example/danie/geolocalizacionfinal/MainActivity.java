@@ -31,8 +31,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /*import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +53,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     //Firebase
+    private Firebase firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     static final int PREINSERT = 1;
     List<Lugar> lugares = new ArrayList<Lugar>();
+    List<Lugar> lugaresFb;
     GestorLugar gestor;
     Ayudante ayudante;
     RecyclerView recyclerView;
@@ -82,9 +88,16 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Firebase
+        firebase = new Firebase(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
+        firebaseUser = firebase.getUsuario();
+
+        getLugaresFirebase();
+
+        //borrar base de datos
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -241,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             Map<String, Object> saveItem = new HashMap<>();
             String key = databaseReference.child("item").push().getKey();
             lugarInsertado.setKey(key);
-            saveItem.put("/usurio/lugar/" + key + "/", lugarInsertado.toMap());
+            saveItem.put("/usuarios/"+ firebaseUser.getUid() +"/lugar/" + key + "/", lugarInsertado.toMap());
             databaseReference.updateChildren(saveItem)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -277,5 +290,42 @@ public class MainActivity extends AppCompatActivity {
             }
             fab.setEnabled(true);
         }
+    }
+
+    public void getLugaresFirebase(){
+        lugaresFb = new ArrayList<>();
+        Query listaLugares = FirebaseDatabase.getInstance().getReference().child("/usuarios/"+ firebaseUser.getUid() +"/lugar/");
+        listaLugares.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot hijo: dataSnapshot.getChildren()){
+                    Lugar l = new Lugar();
+                    String nombre = (String) hijo.child("nombre").getValue();
+                    String localidad = (String) hijo.child("localidad").getValue();
+                    String pais = (String) hijo.child("pais").getValue();
+                    double latitud = (double) hijo.child("latitud").getValue();
+                    double longitud = (double) hijo.child("longitud").getValue();
+                    String comentario = (String) hijo.child("comentario").getValue();
+                    int puntuacion = (int) hijo.child("puntuacion").getValue();
+                    String fecha = (String) hijo.child("fecha").getValue();
+                    String key = (String) hijo.child("key").getValue();
+                    l.setNombre(nombre);
+                    l.setLatitud(latitud);
+                    l.setLongitud(longitud);
+                    l.setLocalidad(localidad);
+                    l.setPais(pais);
+                    l.setComentario(comentario);
+                    l.setPuntuacion(puntuacion);
+                    l.setFecha(fecha);
+                    l.setKey(key);
+                    lugaresFb.add(l);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

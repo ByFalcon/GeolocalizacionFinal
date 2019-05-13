@@ -2,14 +2,19 @@ package com.example.danie.geolocalizacionfinal;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,6 +28,8 @@ public class IniciarSesion extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     PreferenciasCompartidas preferenciasCompartidas;
 
+    private String emailPreferencias, contraPreferencias;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +38,35 @@ public class IniciarSesion extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         init();
+
+        Intent i  = getIntent();
+
+        String email = i.getStringExtra("email");
+        String contra = i.getStringExtra("contra");
+
+        etEmailIS.setText(email);
+        etContraIS.setText(contra);
+
+        if(preferenciasCompartidas.getPreferencias() != null){
+            String s = preferenciasCompartidas.getPreferencias();
+            String[] array = s.split("-");
+            try{
+                emailPreferencias = array[0];
+                contraPreferencias = array[1];
+                iniciarSesion(emailPreferencias, contraPreferencias);
+            }catch (ArrayIndexOutOfBoundsException ex){}
+        }
+
+        btIniciarSesionIS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!etEmailIS.getText().toString().isEmpty() && !etContraIS.getText().toString().isEmpty()){
+                    iniciarSesion(etEmailIS.getText().toString(), etContraIS.getText().toString());
+                }else{
+                    Toast.makeText(IniciarSesion.this, "Usuario o contraseña incorrecta", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         btRegisterIS.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,13 +81,6 @@ public class IniciarSesion extends AppCompatActivity {
             public void onClick(View v) {
                 //Crear actividad para recordar contraseña
                 //...
-            }
-        });
-
-        btIniciarSesionIS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -69,5 +98,30 @@ public class IniciarSesion extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         firebase = new Firebase(getApplicationContext());
         firebaseAuth=  FirebaseAuth.getInstance();
+    }
+
+    public void iniciarSesion(String email, String contra){
+        final String finalEmail = email;
+        final String  finalPass=contra;
+
+        firebaseAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(IniciarSesion.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                    if (checkBox.isChecked()){
+                        preferenciasCompartidas.guardarUsuarioPC(finalEmail, finalPass);
+                    }
+                    Intent i = new Intent(IniciarSesion.this, MainActivity.class);
+                    startActivity(i);
+                } else {
+                    try{
+                        preferenciasCompartidas.eliminarPreferencias();
+                    } catch (NullPointerException ex){
+                    }
+                    Toast.makeText(IniciarSesion.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
