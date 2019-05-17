@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -91,9 +92,12 @@ public class MainActivity extends AppCompatActivity {
         firebase = new Firebase(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
         firebaseUser = firebase.getUsuario();
+
+        ayudante = new Ayudante(this);
+        gestor = new GestorLugar(this, true);
 
         getLugaresFirebase();
 
@@ -143,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ayudante = new Ayudante(this);
-        gestor = new GestorLugar(this, true);
+
+        getLugaresFirebase();
 
         lugares = gestor.get();
 
-        adaptador = new Adaptador(lugares);
+        adaptador = new Adaptador(lugaresFb);
         recyclerView.setAdapter(adaptador);
 
         adaptador.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             Map<String, Object> saveItem = new HashMap<>();
             String key = databaseReference.child("item").push().getKey();
             lugarInsertado.setKey(key);
-            saveItem.put("/usuarios/"+ firebaseUser.getUid() +"/lugar/" + key + "/", lugarInsertado.toMap());
+            saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +"/lugar/" + key + "/", lugarInsertado.toMap());
             databaseReference.updateChildren(saveItem)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -264,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
                     });
 
             long num = gestor.insert(lugarInsertado);
+            getLugaresFirebase();
+
             //long num = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             if (num > 0){
                 Log.v(TAG, "Se ha entrado en el if del insert");
@@ -277,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
 
                 /* sol 2 */
                 lugares = gestor.get();
-                adaptador.swap(lugares);
+                adaptador.swap(lugaresFb);
 
                 /*
                 sol 3
@@ -294,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getLugaresFirebase(){
         lugaresFb = new ArrayList<>();
-        Query listaLugares = FirebaseDatabase.getInstance().getReference().child("/usuarios/"+ firebaseUser.getUid() +"/lugar/");
+        Query listaLugares = FirebaseDatabase.getInstance().getReference().child("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +"/lugar/");
         listaLugares.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -79,8 +80,8 @@ public class IniciarSesion extends AppCompatActivity {
         btRecordarContra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Crear actividad para recordar contraseña
-                //...
+                Intent i = new Intent(getApplicationContext(), RecuperarContra.class);
+                startActivity(i);
             }
         });
     }
@@ -108,7 +109,8 @@ public class IniciarSesion extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(IniciarSesion.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                    Log.v("ZZZ", "Task successful");
+
                     if (checkBox.isChecked()){
                         preferenciasCompartidas.guardarUsuarioPC(finalEmail, finalPass);
                     }
