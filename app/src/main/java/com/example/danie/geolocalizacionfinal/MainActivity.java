@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         ayudante = new Ayudante(this);
         gestor = new GestorLugar(this, true);
 
-        getLugaresFirebase();
+        //getLugaresFirebase();
 
         //borrar base de datos
 
@@ -140,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = getIntent();
             finish();
             startActivity(intent);
+        }
+        if (id == R.id.cerrar_sesion) {
+            Firebase firebase = new Firebase(getApplicationContext());
+            firebase.cerrarSesion();
+            PreferenciasCompartidas pref = new PreferenciasCompartidas(getApplicationContext());
+            pref.eliminarPreferencias();
+            Intent i = new Intent(MainActivity.this, Inicial.class);
+            startActivity(i);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -263,17 +273,15 @@ public class MainActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(MainActivity.this, "Se ha insertado en firebase", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Se ha insertado en firebase", Toast.LENGTH_SHORT ).show();
+                            getLugaresFirebase();
                         }
                     });
 
             long num = gestor.insert(lugarInsertado);
-            getLugaresFirebase();
-
-            //long num = resultData.getLong(ServicioGeocoder.Constants.RESULT_DATA_KEY);
             if (num > 0){
                 Log.v(TAG, "Se ha entrado en el if del insert");
-
+                Toast.makeText(MainActivity.this, "Se ha insertado en la base de datos local", Toast.LENGTH_SHORT).show();
                 /*
                 sol 1
                 Lugar l = resultData.getParcelable("lugarInsertado");
@@ -282,8 +290,8 @@ public class MainActivity extends AppCompatActivity {
                 */
 
                 /* sol 2 */
-                lugares = gestor.get();
-                adaptador.swap(lugaresFb);
+                //lugares = gestor.get();
+                //adaptador.swap(lugaresFb);
 
                 /*
                 sol 3
@@ -309,10 +317,10 @@ public class MainActivity extends AppCompatActivity {
                     String nombre = (String) hijo.child("nombre").getValue();
                     String localidad = (String) hijo.child("localidad").getValue();
                     String pais = (String) hijo.child("pais").getValue();
-                    double latitud = (double) hijo.child("latitud").getValue();
-                    double longitud = (double) hijo.child("longitud").getValue();
+                    double latitud = Double.parseDouble(String.valueOf(hijo.child("latitud").getValue()));
+                    double longitud = Double.parseDouble(String.valueOf(hijo.child("longitud").getValue()));
                     String comentario = (String) hijo.child("comentario").getValue();
-                    int puntuacion = (int) hijo.child("puntuacion").getValue();
+                    int puntuacion = Integer.parseInt(String.valueOf(hijo.child("puntuacion").getValue()));
                     String fecha = (String) hijo.child("fecha").getValue();
                     String key = (String) hijo.child("key").getValue();
                     l.setNombre(nombre);
@@ -326,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
                     l.setKey(key);
                     lugaresFb.add(l);
                 }
+                adaptador.swap(lugaresFb);
             }
 
             @Override

@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/cerrar_sesion"
+        android:icon="@drawable/ic_exit_to_app_white_24dp"
+        android:title="Cerrar Sesión"
+        app:showAsAction="always" />
 </menu>

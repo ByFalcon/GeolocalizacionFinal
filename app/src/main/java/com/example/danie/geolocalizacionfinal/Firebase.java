@@ -69,7 +69,7 @@ public class Firebase {
 
     }
 
-    public void editarLectura(Lugar l){
+    public void editarLugar(Lugar l){
 
     }
 
