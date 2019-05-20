@@ -1,7 +1,6 @@
 package com.example.danie.geolocalizacionfinal;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,19 +13,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Firebase {
 
     private final String TAG = "ZZZ";
     private FirebaseAuth autentificador;
-    private FirebaseUser usuario;
+    private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
-    private DatabaseReference reference;
+    private DatabaseReference databaseReference;
     private Context contexto;
 
     public Firebase(Context c) {
         contexto = c;
         database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
+        databaseReference = database.getReference();
         autentificador = FirebaseAuth.getInstance();
     }
 
@@ -66,14 +68,24 @@ public class Firebase {
     }
 
     public void guardarLugar(Lugar l){
+        Map<String, Object> saveItem = new HashMap<>();
+        String key = databaseReference.child("item").push().getKey();
+        l.setKey(key);
+        saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +"/lugar/" + key + "/", l.toMap());
+        databaseReference.updateChildren(saveItem)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
 
+                    }
+                });
     }
 
     public void editarLugar(Lugar l){
 
     }
 
-    public void eliminarLectura(Lugar l){
+    public void eliminarLugar(Lugar l){
 
     }
 }

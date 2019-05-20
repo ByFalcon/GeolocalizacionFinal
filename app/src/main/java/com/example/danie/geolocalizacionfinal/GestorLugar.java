@@ -105,13 +105,21 @@ public class GestorLugar {
     }
 
     //update -> edit - update - save
-    public int edit(Lugar lugar) {
+    public int editId(Lugar lugar) {
         //objeto -> content values
         return bd.update(
                 Contrato.TableLugar.TABLE,
                 GestorLugar.get(lugar),
                 Contrato.TableLugar._ID + " = ?",
                 new String[]{lugar.getId() + ""});
+    }
+
+    public int edit(Lugar lugar){
+        return bd.update(
+                Contrato.TableLugar.TABLE,
+                GestorLugar.get(lugar),
+                Contrato.TableLugar.KEY + " = ?",
+                new String[]{lugar.getKey() + ""});
     }
 
     //delete -> delete, erase, remove
@@ -125,6 +133,17 @@ public class GestorLugar {
         return bd.delete(Contrato.TableLugar.TABLE, condicion, argumentos);
     }
 
+    public int remove(String key) {
+        String condicion = Contrato.TableLugar.KEY + " = ?";
+        String[] argumentos = { key + "" };
+        return bd.delete(Contrato.TableLugar.TABLE, condicion, argumentos);
+    }
+
+    public int removeAll(){
+        return bd.delete(Contrato.TableLugar.TABLE, null, null);
+    }
+
+    //...
     public static Lugar get(Cursor c) {//devolver un objeto a partir de las columnas
         Lugar lugar = new Lugar();
         lugar.setId(c.getLong(c.getColumnIndex(Contrato.TableLugar._ID)));
