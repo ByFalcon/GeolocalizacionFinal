@@ -1,10 +1,12 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -79,14 +81,43 @@ public class Detail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.eliminar_lugar) {
-            Intent i = new Intent();
-            //eliminar de firebase
-            gestor.remove(lugar.getKey());
-            setResult(RESULT_OK, i);
-            finish();
+            dialogoConfirmar();
             return true;
+        }
+        if (id == R.id.editar_lugar) {
+            Intent i = new Intent(this, Editar.class);
+            i.putExtra("lugarEditar", lugar);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void dialogoConfirmar(){
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+        dialogo.setTitle("¿Eliminar lugar?");
+        dialogo.setMessage("Eliminará este lugar de forma permanente.");
+        dialogo.setCancelable(false);
+        dialogo.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo, int id) {
+                aceptar();
+            }
+        });
+        dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                cancelar();
+            }
+        });
+        dialogo.show();
+    }
+
+    private void aceptar() {
+        //eliminar de firebase
+        gestor.remove(lugar.getKey());
+        finish();
+    }
+
+    private void cancelar() {
+        //finish();
+    }
 }

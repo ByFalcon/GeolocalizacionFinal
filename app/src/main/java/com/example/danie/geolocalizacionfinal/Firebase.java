@@ -67,21 +67,17 @@ public class Firebase {
                 });
     }
 
-    public void guardarLugar(Lugar l){
-        Map<String, Object> saveItem = new HashMap<>();
-        String key = databaseReference.child("item").push().getKey();
-        l.setKey(key);
-        saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +"/lugar/" + key + "/", l.toMap());
-        databaseReference.updateChildren(saveItem)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
-    }
-
     public void editarLugar(Lugar l){
+        Map<String, Object> saveItem = new HashMap<>();
+        String key = l.getKey();
+        saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
+                "/lugar/" + key + "/", l.toMap());
+        databaseReference.updateChildren(saveItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(contexto, "Se ha editado en firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

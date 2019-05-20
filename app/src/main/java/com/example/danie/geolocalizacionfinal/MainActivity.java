@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         for (Lugar l:lugaresFb){
             long num = gestor.insert(l);
         }
+        lugares = gestor.get();
 
         adaptador = new Adaptador(lugaresFb);
         recyclerView.setAdapter(adaptador);
@@ -132,9 +133,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), Detail.class);
-                Lugar lugar = lugares.get(recyclerView.getChildAdapterPosition(v));
+                Lugar lugar = lugaresFb.get(recyclerView.getChildAdapterPosition(v));
                 i.putExtra("lugarDetalle", lugar);
-                startActivityForResult(i, DETALLE);
+                startActivity(i);
             }
         });
 
@@ -151,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
             getLocation();
         }
         if(requestCode == DETALLE && resultCode == RESULT_OK) {
+            lugaresFb.clear();
             getLugaresFirebase();
         }
     }
@@ -274,14 +275,23 @@ public class MainActivity extends AppCompatActivity {
             Lugar lugarInsertado = resultData.getParcelable("lugarInsertado");
 
             //insertar fb
-            firebase.guardarLugar(lugarInsertado);
-            getLugaresFirebase();
+            Map<String, Object> saveItem = new HashMap<>();
+            String key = databaseReference.child("item").push().getKey();
+            lugarInsertado.setKey(key);
+            saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
+                    "/lugar/" + key + "/", lugarInsertado.toMap());
+            databaseReference.updateChildren(saveItem)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            getLugaresFirebase();
+                        }
+                    });
 
             //insertart bd local
             long num = gestor.insert(lugarInsertado);
             if (num > 0){
-                Log.v(TAG, "Se ha entrado en el if del insert");
-                Toast.makeText(MainActivity.this, "Se ha insertado en la base de datos local", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Se ha insertado en la base de datos local", Toast.LENGTH_SHORT).show();
                 /*
                 sol 1
                 Lugar l = resultData.getParcelable("lugarInsertado");
@@ -290,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                 */
 
                 /* sol 2 */
-                //lugares = gestor.get();
+                lugares = gestor.get();
                 //adaptador.swap(lugaresFb);
 
                 /*

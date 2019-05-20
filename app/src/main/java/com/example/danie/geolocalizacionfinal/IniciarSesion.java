@@ -25,7 +25,6 @@ public class IniciarSesion extends AppCompatActivity {
     private EditText etEmailIS, etContraIS;
     private CheckBox checkBox;
     private Firebase firebase;
-    private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     PreferenciasCompartidas preferenciasCompartidas;
 

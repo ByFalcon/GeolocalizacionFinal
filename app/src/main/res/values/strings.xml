@@ -16,4 +16,5 @@
     <string name="title_activity_iniciar_sesion">IniciarSesion</string>
     <string name="title_activity_registrarse">Registrarse</string>
     <string name="title_activity_recuperar_contra">RecuperarContra</string>
+    <string name="title_activity_editar">Editar</string>
 </resources>
