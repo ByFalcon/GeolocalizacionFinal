@@ -16,6 +16,11 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Detail extends AppCompatActivity {
 
     private TextView textViewDetalleNombre, textViewDetalleLocalidad, textViewDetallePais,
@@ -25,6 +30,12 @@ public class Detail extends AppCompatActivity {
     GestorLugar gestor;
 
     Lugar lugar;
+
+    private Firebase firebase;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +48,6 @@ public class Detail extends AppCompatActivity {
 
         Intent intent = getIntent();
         lugar = intent.getParcelableExtra("lugarDetalle");
-        Log.v("xxx", lugar.toString());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +78,14 @@ public class Detail extends AppCompatActivity {
         textViewDetalleComentario = findViewById(R.id.textViewDetalleComentario);
         ratingBar = findViewById(R.id.ratingBar);
         textViewDetalleFecha = findViewById(R.id.textViewDetalleFecha);
+
         gestor = new GestorLugar(this, true);
+
+        firebase = new Firebase(getApplicationContext());
+        firebaseUser = firebase.getUsuario();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
     }
 
     @Override
@@ -113,7 +130,13 @@ public class Detail extends AppCompatActivity {
 
     private void aceptar() {
         //eliminar de firebase
+        Intent i = new Intent();
+        String url = "/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
+        "/lugar/" + lugar.getKey();
+        databaseReference = firebaseDatabase.getReference(url);
+        databaseReference.removeValue();
         gestor.remove(lugar.getKey());
+        setResult(RESULT_OK, i);
         finish();
     }
 

@@ -17,7 +17,7 @@ public class PreferenciasCompartidas {
     public void guardarUsuarioPC(String email, String contra){
         preferencias = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferencias.edit();
-        editor.putString("usuario", email +"-"+ contra);
+        editor.putString("credenciales", email +"-"+ contra);
         editor.apply();
     }
 

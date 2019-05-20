@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), Detail.class);
                 Lugar lugar = lugaresFb.get(recyclerView.getChildAdapterPosition(v));
                 i.putExtra("lugarDetalle", lugar);
-                startActivity(i);
+                startActivityForResult(i, DETALLE);
             }
         });
 

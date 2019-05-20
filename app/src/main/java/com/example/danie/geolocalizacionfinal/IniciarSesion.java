@@ -1,8 +1,10 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,6 +31,8 @@ public class IniciarSesion extends AppCompatActivity {
     PreferenciasCompartidas preferenciasCompartidas;
 
     private String emailPreferencias, contraPreferencias;
+
+    private AlertDialog.Builder dialogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,7 @@ public class IniciarSesion extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    dialogoIniciarSesion(dialogo);
                     Log.v("ZZZ", "Task successful");
 
                     if (checkBox.isChecked()){
@@ -124,5 +129,23 @@ public class IniciarSesion extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    public void cancelar(){
+
+    }
+
+    public void dialogoIniciarSesion(AlertDialog.Builder dialogo){
+        dialogo = new AlertDialog.Builder(this);
+        dialogo.setTitle("Iniciar sesión");
+        dialogo.setMessage("Iniciando sesión...");
+        dialogo.setCancelable(false);
+        /*dialogo.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                cancelar();
+            }
+        });*/
+        dialogo.show();
     }
 }
