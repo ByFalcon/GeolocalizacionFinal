@@ -65,8 +65,8 @@ public class Add extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!editTextNombre.getText().toString().isEmpty()) {
-                    lugar.setNombre(editTextNombre.getText().toString());
-                    lugar.setComentario(editTextComentario.getText().toString());
+                    lugar.setNombre(editTextNombre.getText().toString().trim());
+                    lugar.setComentario(editTextComentario.getText().toString().trim());
                     lugar.setPuntuacion(Integer.parseInt(tvPuntuacion.getText().toString()));
                     String date = dateNow();
                     lugar.setFecha(date);

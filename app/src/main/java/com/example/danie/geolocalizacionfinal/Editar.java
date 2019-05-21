@@ -1,5 +1,6 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -81,22 +83,28 @@ public class Editar extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                l.setNombre(etNombreEditar.getText().toString());
-                l.setPuntuacion(Integer.parseInt(tvPuntosEditar.getText().toString()));
-                l.setComentario(etComentarioEditar.getText().toString());
-                Map<String, Object> saveItem = new HashMap<>();
-                String key = l.getKey();
-                saveItem.put("/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
-                        "/lugar/" + key + "/", l.toMap());
-                databaseReference.updateChildren(saveItem).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Toast.makeText(getApplicationContext(), "Se ha editado en firebase", Toast.LENGTH_SHORT).show();
-                        long nunmç = gestor.edit(l);
-                        startActivity(intent);
-                    }
-                });
+                if (!etNombreEditar.getText().toString().isEmpty()) {
+                    l.setNombre(etNombreEditar.getText().toString().trim());
+                    l.setPuntuacion(Integer.parseInt(tvPuntosEditar.getText().toString()));
+                    l.setComentario(etComentarioEditar.getText().toString().trim());
+                    Map<String, Object> saveItem = new HashMap<>();
+                    String key = l.getKey();
+                    saveItem.put("/usuarios/" + firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
+                            "/lugar/" + key + "/", l.toMap());
+                    databaseReference.updateChildren(saveItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Toast.makeText(getApplicationContext(), "Se ha editado en firebase", Toast.LENGTH_SHORT).show();
+                            long nunmç = gestor.edit(l);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    Toast.makeText(Editar.this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="#FFFFFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Editar"
     tools:showIn="@layout/activity_editar">
@@ -15,7 +15,6 @@
         android:layout_height="40dp"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:background="@drawable/campos_de_texto_redondeados"
@@ -24,7 +23,7 @@
         android:inputType="textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/editTextComentarioEditar"
@@ -32,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:background="@drawable/campos_de_texto_redondeados"
@@ -42,7 +40,7 @@
         android:inputType="textCapSentences|textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPuntosEditar" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textViewPuntosEditar"
@@ -50,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="1"
-        android:textColor="#F44336"
+        android:textColor="#03A9F4"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/buttonMasEditar"
@@ -66,7 +64,7 @@
         android:layout_marginTop="64dp"
         android:background="@android:color/transparent"
         android:text="-"
-        android:textColor="#FFFFFF"
+        android:textColor="#03A9F4"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textViewPuntosEditar"
@@ -82,7 +80,7 @@
         android:layout_marginTop="64dp"
         android:background="@android:color/transparent"
         android:text="+"
-        android:textColor="#FFFFFF"
+        android:textColor="#03A9F4"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,4 +88,27 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/textViewPuntosEditar"
         app:layout_constraintTop_toBottomOf="@+id/editTextNombreEditar" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="64dp"
+        android:text="Nombre: "
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="64dp"
+        android:text="Comentario: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPuntosEditar" />
 </android.support.constraint.ConstraintLayout>

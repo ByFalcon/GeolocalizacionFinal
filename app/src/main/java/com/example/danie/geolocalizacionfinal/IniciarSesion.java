@@ -32,7 +32,7 @@ public class IniciarSesion extends AppCompatActivity {
 
     private String emailPreferencias, contraPreferencias;
 
-    private AlertDialog.Builder dialogo;
+    AlertDialog dialogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +108,17 @@ public class IniciarSesion extends AppCompatActivity {
         final String finalEmail = email;
         final String  finalPass=contra;
 
+        dialogo = new AlertDialog.Builder(IniciarSesion.this).create();
+        dialogo.setTitle("Iniciar sesión");
+        dialogo.setMessage("Iniciando sesión...");
+        dialogo.setCancelable(false);
+        dialogo.show();
+
         firebaseAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    dialogoIniciarSesion(dialogo);
-                    Log.v("ZZZ", "Task successful");
-
+                    //dialogoIniciarSesion(dialogo);
                     if (checkBox.isChecked()){
                         preferenciasCompartidas.guardarUsuarioPC(finalEmail, finalPass);
                     }
@@ -125,27 +129,29 @@ public class IniciarSesion extends AppCompatActivity {
                         preferenciasCompartidas.eliminarPreferencias();
                     } catch (NullPointerException ex){
                     }
-                    Toast.makeText(IniciarSesion.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    dialogo.dismiss();
+                    dialogoCredencialesIncorrectas();
+
                 }
             }
         });
 
     }
 
-    public void cancelar(){
+    public void aceptar(){
 
     }
 
-    public void dialogoIniciarSesion(AlertDialog.Builder dialogo){
-        dialogo = new AlertDialog.Builder(this);
-        dialogo.setTitle("Iniciar sesión");
-        dialogo.setMessage("Iniciando sesión...");
-        dialogo.setCancelable(false);
-        /*dialogo.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+    public void dialogoCredencialesIncorrectas(){
+        AlertDialog.Builder dialogoIncorrectos = new AlertDialog.Builder(this);
+        dialogoIncorrectos.setTitle("Imposible iniciar sesión");
+        dialogoIncorrectos.setMessage("Email o contraseña incorrectas");
+        dialogoIncorrectos.setCancelable(false);
+        dialogoIncorrectos.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                cancelar();
+                aceptar();
             }
-        });*/
-        dialogo.show();
+        });
+        dialogoIncorrectos.show();
     }
 }
