@@ -98,6 +98,7 @@ public class Editar extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Se ha editado en firebase", Toast.LENGTH_SHORT).show();
                             long nunmç = gestor.edit(l);
                             startActivity(intent);
+                            finish();
                         }
                     });
                 } else {

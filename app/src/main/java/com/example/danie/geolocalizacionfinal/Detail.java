@@ -105,6 +105,7 @@ public class Detail extends AppCompatActivity {
             Intent i = new Intent(this, Editar.class);
             i.putExtra("lugarEditar", lugar);
             startActivity(i);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -129,7 +130,6 @@ public class Detail extends AppCompatActivity {
     }
 
     private void aceptar() {
-        //eliminar de firebase
         Intent i = new Intent();
         String url = "/usuarios/"+ firebaseUser.getUid() + "-" + firebaseUser.getDisplayName() +
         "/lugar/" + lugar.getKey();

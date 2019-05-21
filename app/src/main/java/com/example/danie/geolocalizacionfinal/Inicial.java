@@ -28,6 +28,7 @@ public class Inicial extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(getApplicationContext(), IniciarSesion.class);
                 startActivity(intent);
+                finish();
             }
         });
 
