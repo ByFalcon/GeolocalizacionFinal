@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.danie.geolocalizacionfinal.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/cerrar_sesion"
         android:icon="@drawable/ic_exit_to_app_white_24dp"
         android:title="Cerrar Sesión"

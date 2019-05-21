@@ -2,6 +2,7 @@ package com.example.danie.geolocalizacionfinal;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -163,21 +165,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
         if (id == R.id.cerrar_sesion) {
-            Firebase firebase = new Firebase(getApplicationContext());
-            firebase.cerrarSesion();
-            PreferenciasCompartidas pref = new PreferenciasCompartidas(getApplicationContext());
-            pref.eliminarPreferencias();
-            Intent i = new Intent(MainActivity.this, Inicial.class);
-            startActivity(i);
+            AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+            dialogo.setTitle("Cerrar Sesión");
+            dialogo.setMessage("¿Desea cerrar sesión?");
+            dialogo.setCancelable(false);
+            dialogo.setPositiveButton("Cerrar sesión", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    aceptar();     
+                }
+            });
+            dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancelar();     
+                }
+            });
+            dialogo.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void cancelar() {
+    }
+
+    private void aceptar() {
+        Firebase firebase = new Firebase(getApplicationContext());
+        firebase.cerrarSesion();
+        PreferenciasCompartidas pref = new PreferenciasCompartidas(getApplicationContext());
+        pref.eliminarPreferencias();
+        Intent i = new Intent(MainActivity.this, Inicial.class);
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -308,9 +329,9 @@ public class MainActivity extends AppCompatActivity {
                 adacptador basado en el cursor
                 */
 
-                Toast.makeText(MainActivity.this, "Se ha insertado el lugar", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Se ha insertado el lugar", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "No se ha insertado el lugar", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "No se ha insertado el lugar", Toast.LENGTH_SHORT).show();
             }
             fab.setEnabled(true);
         }
