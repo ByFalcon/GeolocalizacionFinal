@@ -37,6 +37,7 @@ public class Inicial extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(getApplicationContext(), Registrarse.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

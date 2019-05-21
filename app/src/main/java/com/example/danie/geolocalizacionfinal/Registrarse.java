@@ -38,6 +38,7 @@ public class Registrarse extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), IniciarSesion.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -46,11 +47,11 @@ public class Registrarse extends AppCompatActivity {
             public void onClick(View v) {
                 if (usuarioCorrecto()){
                     firebase.crearUsuario(etEmailReg.getText().toString(), etContraReg.getText().toString());
-
                     Intent iniSesion = new Intent(Registrarse.this, IniciarSesion.class);
                     iniSesion.putExtra("email", etEmailReg.getText().toString());
                     iniSesion.putExtra("contra", etContraReg.getText().toString());
                     startActivity(iniSesion);
+                    finish();
                 }
             }
         });
