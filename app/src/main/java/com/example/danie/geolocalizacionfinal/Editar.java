@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +61,9 @@ public class Editar extends AppCompatActivity {
         etNombreEditar.setText(l.getNombre());
         tvPuntosEditar.setText(l.getPuntuacion() + "");
         etComentarioEditar.setText(l.getComentario());
+
+        etComentarioEditar.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        etComentarioEditar.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         btMenosEditar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -125,7 +125,7 @@ public class Detail extends AppCompatActivity {
 
     public void buscarEnMapa(){
         //Uri gmmIntentUri = Uri.parse("geo:"+lugar.getLatitud()+","+lugar.getLongitud());//google maps mapa general
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps con punto
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud()+"("+lugar.getNombre()+")");//google maps con punto
         //Uri gmmIntentUri = Uri.parse("google.navigation:q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps navigation
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
