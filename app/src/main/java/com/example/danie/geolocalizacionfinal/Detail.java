@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.Rating;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -100,6 +101,16 @@ public class Detail extends AppCompatActivity {
             i.putExtra("lugarEditar", lugar);
             startActivity(i);
             finish();
+        }
+        if(id == R.id.buscar_maps){
+            //Uri gmmIntentUri = Uri.parse("geo:"+lugar.getLatitud()+","+lugar.getLongitud());
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud());
+            //Uri gmmIntentUri = Uri.parse("google.navigation:q="+lugar.getLatitud()+","+lugar.getLongitud());
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(mapIntent);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
