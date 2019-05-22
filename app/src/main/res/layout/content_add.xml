@@ -17,9 +17,10 @@
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:ems="10"
-        android:singleLine="true"
         android:hint="Nombre: "
         android:inputType="textCapSentences"
+        android:maxLength="36"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -30,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="64dp"
         android:background="@drawable/button_redondo"
         android:text="-"
         android:textColor="#FFFFFF"
@@ -38,13 +38,12 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textViewPuntuacion"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <Button
         android:id="@+id/buttonSumar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:background="@drawable/button_redondo"
@@ -54,20 +53,19 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewPuntuacion"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
         android:id="@+id/textViewPuntuacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:text="1"
         android:textColor="#03A9F4"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/buttonSumar"
         app:layout_constraintStart_toEndOf="@+id/buttonRestar"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <EditText
         android:id="@+id/editTextComentario"
@@ -82,7 +80,8 @@
         android:hint="Comentario: "
         android:inputType="textCapSentences|textMultiLine"
         android:isScrollContainer="true"
-        android:maxLines="5"
+        android:maxLength="250"
+        android:maxLines="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -93,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/button_redondo"
@@ -111,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:text="Nombre: "
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,9 +122,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:text="Comentario: "
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPuntuacion" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="32dp"
+        android:text="Puntuación: "
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
 </android.support.constraint.ConstraintLayout>

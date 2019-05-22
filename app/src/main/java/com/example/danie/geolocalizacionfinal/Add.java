@@ -36,6 +36,7 @@ public class Add extends AppCompatActivity {
         setContentView(R.layout.activity_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
 
@@ -79,16 +80,6 @@ public class Add extends AppCompatActivity {
                 }else{
                     Toast.makeText(Add.this, "Debes introducir un nombre", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent();
-                setResult(Add.RESULT_CANCELED, i);
-                finish();
             }
         });
     }

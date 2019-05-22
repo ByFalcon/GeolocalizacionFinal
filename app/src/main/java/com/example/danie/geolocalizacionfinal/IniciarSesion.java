@@ -125,11 +125,6 @@ public class IniciarSesion extends AppCompatActivity {
                     Intent i = new Intent(IniciarSesion.this, MainActivity.class);
                     startActivity(i);
                     finish();
-                    /*
-                     *
-                     *probar!!!!!!!!!!!!!!!!
-                     *
-                     */
                 } else {
                     try{
                         preferenciasCompartidas.eliminarPreferencias();

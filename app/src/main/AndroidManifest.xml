@@ -26,19 +26,22 @@
             android:label="@string/title_activity_iniciar_sesion"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".Inicial"/>
         <activity
             android:name=".Registrarse"
             android:label="@string/title_activity_registrarse"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".Inicial"/>
         <activity
             android:name=".RecuperarContra"
             android:label="@string/title_activity_recuperar_contra"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".IniciarSesion"/>
         <activity
             android:name=".MainActivity"
             android:label="Lugares"
@@ -48,17 +51,20 @@
             android:label="Añadir lugar"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".Detail"
             android:label="Info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".Editar"
             android:label="@string/title_activity_editar"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".Detail"></activity>
         <service
             android:name=".ServicioGeocoder"
             android:exported="false" />

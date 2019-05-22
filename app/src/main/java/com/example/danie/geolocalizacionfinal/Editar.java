@@ -47,6 +47,7 @@ public class Editar extends AppCompatActivity {
         setContentView(R.layout.activity_editar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
 

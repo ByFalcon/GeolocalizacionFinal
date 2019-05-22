@@ -13,6 +13,7 @@ public class Inicial extends AppCompatActivity {
 
     private Button btSingIn, btRegister;
     private Intent intent;
+    PreferenciasCompartidas preferenciasCompartidas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,12 @@ public class Inicial extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         init();
+
+        if(preferenciasCompartidas.getPreferencias() != null && preferenciasCompartidas.getPreferencias() != "null"){
+            Intent i = new Intent(this, IniciarSesion.class);
+            startActivity(i);
+            finish();
+        }
 
         btSingIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,5 +52,6 @@ public class Inicial extends AppCompatActivity {
     public void init(){
         btSingIn = findViewById(R.id.buttonSingIn);
         btRegister = findViewById(R.id.buttonRegister);
+        preferenciasCompartidas = new PreferenciasCompartidas(getApplicationContext());
     }
 }

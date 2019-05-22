@@ -43,19 +43,12 @@ public class Detail extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
 
         Intent intent = getIntent();
         lugar = intent.getParcelableExtra("lugarDetalle");
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         textViewDetalleNombre.setText(lugar.getNombre());
         textViewDetalleLocalidad.setText(lugar.getLocalidad());
@@ -64,7 +57,6 @@ public class Detail extends AppCompatActivity {
         textViewDetalleLongitud.setText(lugar.getLongitud() + "");
         textViewDetalleComentario.setText(lugar.getComentario());
         ratingBar.setRating(lugar.getPuntuacion());
-        ratingBar.setFocusable(false);
         ratingBar.setEnabled(false);
         textViewDetalleFecha.setText(lugar.getFecha());
     }

@@ -27,6 +27,7 @@ public class RecuperarContra extends AppCompatActivity {
         setContentView(R.layout.activity_recuperar_contra);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
 
