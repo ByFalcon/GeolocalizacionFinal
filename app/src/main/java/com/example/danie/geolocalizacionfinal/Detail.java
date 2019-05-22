@@ -103,18 +103,47 @@ public class Detail extends AppCompatActivity {
             finish();
         }
         if(id == R.id.buscar_maps){
-            //Uri gmmIntentUri = Uri.parse("geo:"+lugar.getLatitud()+","+lugar.getLongitud());//google maps mapa general
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps con punto
-            //Uri gmmIntentUri = Uri.parse("google.navigation:q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps navigation
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(mapIntent);
-            }
+            AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+            dialogo.setTitle("Buscar en Google Maps");
+            dialogo.setMessage("¿Qué desea hacer?");
+            dialogo.setNegativeButton("Ver en el mapa", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    buscarEnMapa();
+                }
+            });
+            dialogo.setPositiveButton("Como llegar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    navegacion();
+                }
+            });
+            dialogo.show();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void buscarEnMapa(){
+        //Uri gmmIntentUri = Uri.parse("geo:"+lugar.getLatitud()+","+lugar.getLongitud());//google maps mapa general
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps con punto
+        //Uri gmmIntentUri = Uri.parse("google.navigation:q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps navigation
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
+    public void navegacion(){
+        //Uri gmmIntentUri = Uri.parse("geo:"+lugar.getLatitud()+","+lugar.getLongitud());//google maps mapa general
+        //Uri gmmIntentUri = Uri.parse("geo:0,0?q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps con punto
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+lugar.getLatitud()+","+lugar.getLongitud());//google maps navigation
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
 
     public void dialogoConfirmar(){
         AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
