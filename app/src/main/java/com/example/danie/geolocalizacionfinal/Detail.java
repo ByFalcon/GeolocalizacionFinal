@@ -2,6 +2,7 @@ package com.example.danie.geolocalizacionfinal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -39,6 +40,7 @@ public class Detail extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
