@@ -49,6 +49,8 @@ public class Inicial extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
     public void init(){

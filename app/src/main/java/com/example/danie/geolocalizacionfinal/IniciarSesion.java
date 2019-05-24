@@ -1,5 +1,6 @@
 package com.example.danie.geolocalizacionfinal;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -66,6 +68,8 @@ public class IniciarSesion extends AppCompatActivity {
         btIniciarSesionIS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 if (!etEmailIS.getText().toString().isEmpty() && !etContraIS.getText().toString().isEmpty()){
                     iniciarSesion(etEmailIS.getText().toString(), etContraIS.getText().toString());
                 }else{
@@ -155,5 +159,13 @@ public class IniciarSesion extends AppCompatActivity {
             }
         });
         dialogoIncorrectos.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(this, Inicial.class);
+        startActivity(i);
+        finish();
     }
 }

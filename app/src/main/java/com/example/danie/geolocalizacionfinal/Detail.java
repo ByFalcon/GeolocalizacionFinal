@@ -60,8 +60,15 @@ public class Detail extends AppCompatActivity {
         textViewDetalleLongitud.setText(lugar.getLongitud() + "");
         textViewDetalleComentario.setText(lugar.getComentario());
         ratingBar.setRating(lugar.getPuntuacion());
-        ratingBar.setEnabled(false);
+        //ratingBar.setEnabled(false);
         textViewDetalleFecha.setText(lugar.getFecha());
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratingBar.setRating(lugar.getPuntuacion());
+            }
+        });
     }
 
     private void init(){
