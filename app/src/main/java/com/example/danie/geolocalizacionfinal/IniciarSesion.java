@@ -83,6 +83,7 @@ public class IniciarSesion extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), Registrarse.class);
                 startActivity(i);
+                finish();
             }
         });
 

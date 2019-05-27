@@ -6,15 +6,20 @@
         android:id="@+id/buscar_maps"
         android:icon="@drawable/ic_place_white_24dp"
         android:title="Buscar en Google Maps"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/compartir_lugar"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="Compartir"
+        app:showAsAction="always" />
     <item
         android:id="@+id/eliminar_lugar"
         android:icon="@drawable/ic_delete_white_24dp"
         android:title="Eliminar"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/editar_lugar"
         android:icon="@drawable/ic_edit_white_24dp"
         android:title="Editar"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom" />
 </menu>

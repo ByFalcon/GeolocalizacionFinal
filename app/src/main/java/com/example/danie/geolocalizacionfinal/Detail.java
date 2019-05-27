@@ -127,6 +127,25 @@ public class Detail extends AppCompatActivity {
             });
             dialogo.show();
         }
+        if(id == R.id.compartir_lugar){
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            String title = "Compartir con...";
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, lugar.getNombre()
+                    //+"\n"+lugar.getLatitud() +","+lugar.getLongitud()
+                    +"\nhttps://maps.google.com/?q="+lugar.getLatitud()+","+lugar.getLongitud());
+            Intent chooser = Intent.createChooser(intent, title);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(chooser);
+            }
+            /*Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+            whatsappIntent.setType("text/plain");
+            whatsappIntent.setPackage("com.whatsapp");
+            whatsappIntent.putExtra(Intent.EXTRA_TEXT, lugar.getNombre()
+                    //+"\n"+lugar.getLatitud() +","+lugar.getLongitud()
+                    +"\nhttps://maps.google.com/?q="+lugar.getLatitud()+","+lugar.getLongitud());
+            startActivity(whatsappIntent);*/
+        }
         return super.onOptionsItemSelected(item);
     }
 

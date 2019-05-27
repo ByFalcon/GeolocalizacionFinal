@@ -93,16 +93,20 @@ public class ServicioGeocoder extends IntentService {
         }
     }
 
-    protected void goodDirection(String direccion){
+    protected void goodDirection(String direccion) {
         String[] partes = direccion.split(",");
         String localidad = "", pais = "";
-        if (partes.length>=5){
+        if (partes.length >= 5) {
             localidad = partes[2].trim() + ", " + partes[3].trim();
             pais = partes[4].trim();
-        } else if (partes.length>=4) {
+        } else if (partes.length >= 4) {
             localidad = partes[2].trim();
             pais = partes[3].trim();
+        }else if (partes.length>=3) {
+            localidad = partes[1].trim();
+            pais = partes[2].trim();
         }
+
         String numeros = "0123456789";
         String localidadFiltrada = "";
         boolean letraCorrecta;
