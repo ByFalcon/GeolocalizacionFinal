@@ -132,7 +132,6 @@ public class Detail extends AppCompatActivity {
             String title = "Compartir con...";
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, lugar.getNombre()
-                    //+"\n"+lugar.getLatitud() +","+lugar.getLongitud()
                     +"\nhttps://maps.google.com/?q="+lugar.getLatitud()+","+lugar.getLongitud());
             Intent chooser = Intent.createChooser(intent, title);
             if (intent.resolveActivity(getPackageManager()) != null) {
